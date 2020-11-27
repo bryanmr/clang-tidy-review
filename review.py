@@ -32,6 +32,9 @@ def make_file_line_lookup(diff):
                 if not line.is_removed:
                     try:
                         lookup[filename][line.target_line_no] = line.diff_line_no - 5
+                        print("Filename: ",filename,
+                                "\nTarget line number:",line.target_line_no,
+                                "\nDiff line number:",line.diff_line_no)
                     except:
                         print("Something went wrong. Debug information:",
                               "\nFilename:",filename,
