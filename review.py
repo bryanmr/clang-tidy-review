@@ -35,6 +35,7 @@ def make_file_line_lookup(diff):
                     try:
                         lookup[filename][line.target_line_no] = line.diff_line_no - file_count
                         print("Filename: ",filename,
+                                "\nFile Count:",file_count,
                                 "\nTarget line number:",line.target_line_no,
                                 "\nDiff line number:",line.diff_line_no)
                     except Exception as e:
@@ -137,8 +138,6 @@ def get_clang_tidy_warnings(
     print(f"Running:\n\t{command}")
 
     try:
-        print("Current directory:",os.getcwd())
-        print("Files:",os.listdir('.'))
         child = subprocess.run(command, capture_output=True, shell=True, check=True,)
     except subprocess.CalledProcessError as e:
         print(
