@@ -27,19 +27,22 @@ def make_file_line_lookup(diff):
     for file in diff:
         filename = file.target_file[2:]
         lookup[filename] = {}
+        hunk_count = 0
         for hunk in file:
+            hunk_count += 5
             for line in hunk:
                 if not line.is_removed:
                     try:
-                        lookup[filename][line.target_line_no] = line.diff_line_no - 5
+                        lookup[filename][line.target_line_no] = line.diff_line_no - hunk_count
                         print("Filename: ",filename,
                                 "\nTarget line number:",line.target_line_no,
                                 "\nDiff line number:",line.diff_line_no)
-                    except:
+                    except Exception as e:
                         print("Something went wrong. Debug information:",
                               "\nFilename:",filename,
                               "\ntarget_line_no:",line.target_line_no,
                               "\ndiff_line_no:",line.diff_line_no)
+                        print(e)
     return lookup
 
 
