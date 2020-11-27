@@ -24,16 +24,16 @@ def make_file_line_lookup(diff):
 
     """
     lookup = {}
+    file_count = 0
     for file in diff:
+        file_count += 5
         filename = file.target_file[2:]
         lookup[filename] = {}
-        hunk_count = 0
         for hunk in file:
-            hunk_count += 5
             for line in hunk:
                 if not line.is_removed:
                     try:
-                        lookup[filename][line.target_line_no] = line.diff_line_no - hunk_count
+                        lookup[filename][line.target_line_no] = line.diff_line_no - file_count
                         print("Filename: ",filename,
                                 "\nTarget line number:",line.target_line_no,
                                 "\nDiff line number:",line.diff_line_no)
