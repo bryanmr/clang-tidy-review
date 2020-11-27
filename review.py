@@ -29,7 +29,7 @@ def make_file_line_lookup(diff):
     lines_skipped_per_file=5
     lines_in_previous_files = 0
     for file in diff:
-        processed_files++
+        processed_files += 1
         lines_in_previous_files = processed_lines
         filename = file.target_file[2:]
         lookup[filename] = {}
@@ -47,7 +47,7 @@ def make_file_line_lookup(diff):
                               "\ndiff_line_no:",line.diff_line_no)
                         print(e)
 
-                processed_lines++
+                processed_lines += 1
     return lookup
 
 
