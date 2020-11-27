@@ -29,6 +29,10 @@ inputs:
     description: 'Comma-separated list of files or patterns to exclude'
     required: false
     default: ''
+  compile_json:
+    description: 'Do you need to use cmake to build compile_commands.json'
+    required: false
+    default: true
   pr:
     default: ${{ github.event.pull_request.number }}
   repo:
