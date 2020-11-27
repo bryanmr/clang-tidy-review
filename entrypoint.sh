@@ -1,6 +1,7 @@
 #!/bin/bash
+set -xe
 
-if [ "$compile_json" == "true" ]
+if [ "$INPUTS_COMPILE_JSON" == "true" ]
 then
   echo "Outputting clang JSON Compilation database to $(pwd)"
 
