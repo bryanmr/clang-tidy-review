@@ -24,13 +24,36 @@ def make_file_line_lookup(diff):
 
     """
     lookup = {}
+
+    # We need all these variables, since GitHub tracks diff lines per file
+    # Python Unidiff doesn't skip lines, so each git diff has 5 lines to skip
+    # Unidiff tracks for the diff as a whole, so count lines as well
+    processed_lines=0
+    processed_files=0
+    lines_skipped_per_file=5
+    lines_in_previous_files = 0
+
     for file in diff:
+        processed_files += 1
+        # Checkpoint for processed_lines, new filename
+        lines_in_previous_files = processed_lines
         filename = file.target_file[2:]
         lookup[filename] = {}
         for hunk in file:
             for line in hunk:
-                if not line.is_removed:
-                    lookup[filename][line.target_line_no] = line.diff_line_no - 5
+                if not line.is_removed and not line.is_context:
+                    try:
+                        lookup[filename][line.target_line_no] = line.diff_line_no \
+                                - (lines_skipped_per_file * processed_files) \
+                                - lines_in_previous_files
+                    except Exception as e:
+                        print("Something went wrong. Debug information:",
+                              "\nFilename:",filename,
+                              "\ntarget_line_no:",line.target_line_no,
+                              "\ndiff_line_no:",line.diff_line_no)
+                        print(e)
+
+                processed_lines += 1
     return lookup
 
 
