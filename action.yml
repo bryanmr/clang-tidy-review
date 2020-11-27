@@ -32,7 +32,7 @@ inputs:
   compile_json:
     description: 'Do you need to use cmake to build compile_commands.json'
     required: false
-    default: true
+    default: false
   pr:
     default: ${{ github.event.pull_request.number }}
   repo:

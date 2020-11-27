@@ -24,12 +24,18 @@ def make_file_line_lookup(diff):
 
     """
     lookup = {}
+
+    # We need all these variables, since GitHub tracks diff lines per file
+    # Python Unidiff doesn't skip lines, so each git diff has 5 lines to skip
+    # Unidiff tracks for the diff as a whole, so count lines as well
     processed_lines=0
     processed_files=0
     lines_skipped_per_file=5
     lines_in_previous_files = 0
+
     for file in diff:
         processed_files += 1
+        # Checkpoint for processed_lines, new filename
         lines_in_previous_files = processed_lines
         filename = file.target_file[2:]
         lookup[filename] = {}
