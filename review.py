@@ -24,26 +24,30 @@ def make_file_line_lookup(diff):
 
     """
     lookup = {}
-    file_count = 0
+    processed_lines=0
+    processed_files=0
+    lines_skipped_per_file=5
+    lines_in_previous_files = 0
     for file in diff:
-        file_count += 5
+        processed_files++
+        lines_in_previous_files = processed_lines
         filename = file.target_file[2:]
         lookup[filename] = {}
         for hunk in file:
             for line in hunk:
-                if not line.is_removed:
+                if not line.is_removed and not line.is_context:
                     try:
-                        lookup[filename][line.target_line_no] = line.diff_line_no - file_count
-                        print("Filename: ",filename,
-                                "\nFile Count:",file_count,
-                                "\nTarget line number:",line.target_line_no,
-                                "\nDiff line number:",line.diff_line_no)
+                        lookup[filename][line.target_line_no] = line.diff_line_no \
+                                - (lines_skipped_per_file * processed_files) \
+                                - lines_in_previous_files
                     except Exception as e:
                         print("Something went wrong. Debug information:",
                               "\nFilename:",filename,
                               "\ntarget_line_no:",line.target_line_no,
                               "\ndiff_line_no:",line.diff_line_no)
                         print(e)
+
+                processed_lines++
     return lookup
 
 
