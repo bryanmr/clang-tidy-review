@@ -30,7 +30,13 @@ def make_file_line_lookup(diff):
         for hunk in file:
             for line in hunk:
                 if not line.is_removed:
-                    lookup[filename][line.target_line_no] = line.diff_line_no - 5
+                    try:
+                        lookup[filename][line.target_line_no] = line.diff_line_no - 5
+                    except:
+                        print("Something went wrong. Debug information:",
+                              "\nFilename:",filename,
+                              "\ntarget_line_no:",line.target_line_no,
+                              "\ndiff_line_no:",line.diff_line_no)
     return lookup
 
 
@@ -125,6 +131,8 @@ def get_clang_tidy_warnings(
     print(f"Running:\n\t{command}")
 
     try:
+        print("Current directory:",os.getcwd())
+        print("Files:",os.listdir('.'))
         child = subprocess.run(command, capture_output=True, shell=True, check=True,)
     except subprocess.CalledProcessError as e:
         print(
